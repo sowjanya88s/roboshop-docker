@@ -1,0 +1,91 @@
+services:
+  mongodb:
+    build: ./mongodb
+  image: jujjurisowjanya/mongodb:1.0.0
+  container_name: mongodb
+
+  catalogue:
+   build: ./catalogue
+  image: jujjurisowjanya/catalogue:1.0.0
+  container_name: catalogue
+  depends_on:
+  - mongodb
+
+  redis:
+  image: redis:7.0
+  container_name: redis
+
+  user:
+   build: ./user
+  image: jujjurisowjanya/user:1.0.0
+  container_name: user
+  depends_on:
+  - redis
+  - mongodb
+
+  cart:
+   build: ./cart
+  image: jujjurisowjanya/cart:1.0.0
+  container_name: cart
+  depends_on:
+  - redis
+  - catalogue
+
+  mysql:
+   build: ./mysql
+  image: jujjurisowjanya/mysql:1.0.0
+  container_name: mysql
+
+  shipping:
+   build: ./shipping
+  image: jujjurisowjanya/shipping:1.0.0
+  container_name: shipping
+  depends_on: 
+  - cart
+  - mysql
+
+  rabbitmq:
+   image: rabbitmq:3.0
+  environment:
+   RABBITMQ_DEFAULT_USER: roboshop
+   RABBITMQ_DEFAULT_PASSWORD: roboshop123
+  container_name: rabbitmq
+
+
+  payment:
+   build: ./payment
+  image: jujjurisowjanya/payment:1.0.0
+  container_name: payment
+  environment:
+    CART_HOST: "cart"
+    CART_PORT: "8080"
+    USER_HOST: "user"
+    USER_PORT: "8080"
+    AMQP_HOST: "rabbitmq"
+    AMQP_USER: "roboshop"
+    AMQP_PASSWORD: "roboshop123"
+
+  depends_on: 
+  - cart
+  - user
+  - rabbitmq
+
+  frontend:
+   build: ./frontend
+  image: jujjurisowjanya/frontend:1.0.0
+  container_name: frontend
+  ports:
+  - "80:80"
+  depends_on: 
+  - catalogue
+  - user
+  - cart
+  - shipping
+  - payment
+
+  networks:
+   default:
+    driver: bridge
+    name: roboshop
+    external: false
+
