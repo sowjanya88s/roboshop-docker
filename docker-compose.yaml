@@ -83,7 +83,7 @@ services:
    - shipping
    - payment
 
-  networks:
+networks:
    default:
     driver: bridge
     name: roboshop
