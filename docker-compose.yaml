@@ -4,8 +4,8 @@ services:
     image: jujjurisowjanya/mongodb:1.0.0
     container_name: mongodb
   
-  volumes:
-  - mongodb:/data/db
+    volumes:
+    - mongodb:/data/db
 
   catalogue:
    build: ./catalogue
@@ -18,8 +18,8 @@ services:
    image: redis:7.0
    container_name: redis
 
-  volumes:
-  - redis:/data
+   volumes:
+   - redis:/data
 
   user:
    build: ./user
@@ -42,8 +42,8 @@ services:
    image: jujjurisowjanya/mysql:1.0.0
    container_name: mysql
   
-  volumes:
-  - mysql:/var/lib/mysql
+   volumes:
+   - mysql:/var/lib/mysql
 
   shipping:
    build: ./shipping
@@ -59,8 +59,8 @@ services:
     RABBITMQ_DEFAULT_USER: roboshop
     RABBITMQ_DEFAULT_PASSWORD: roboshop123
    container_name: rabbitmq
-  volumes:
-  - rabbitmq:/var/lib/rabbitmq/
+   volumes:
+   - rabbitmq:/var/lib/rabbitmq/
 
   payment:
    build: ./payment
