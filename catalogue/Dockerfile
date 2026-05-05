@@ -4,13 +4,15 @@ COPY server.js /app
 COPY package.json /app
 RUN npm install
 
+
 FROM node:20.20.2-alpine3.23
 WORKDIR /app
+EXPOSE 8080
 COPY --from=builder /app /app
 RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
 RUN chown -R roboshop:roboshop /app
-ENV MONGO="true" \
-    MONGO_URL="mongodb://mongodb:27017/catalogue"
+#ENV MONGO="true" \
+    #MONGO_URL="mongodb://mongodb:27017/catalogue"
 USER roboshop
 CMD ["server.js"]
 ENTRYPOINT ["node"]
